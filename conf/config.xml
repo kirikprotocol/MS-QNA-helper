@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+  <section name="ms.qna.bot">
+
+    <param name="push.url" type="string">http://devel.globalussd.mobi/push?service=eyeline.demo</param>
+
+    <section name="ms.qna">
+      <param name="knowledge.base.id" type="string">TOKEN</param>
+      <param name="subscription.key" type="string">TOKEN</param>
+      <param name="min.acceptable.score.level" type="int">0</param>
+    </section>
+
+    <section name="chat">
+      <param name="bot.ask.command.name" type="string">ask</param>
+    </section>
+
+  </section>
+
+</config>
