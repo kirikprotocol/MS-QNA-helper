@@ -36,7 +36,7 @@ public class MsQnaBotServlet extends HttpServlet {
   private final static String NOT_FOUND_ANSWER_TEXT_RU = "Извините, у меня нет ответа на ваш вопрос. Ваш запрос был перенаправлен нашей команде. Пожалуйста, ожидайте ответа.";
 
   private final static String PAGE_EMPTY = "<page version=\"2.0\"></page>";
-  private final static String PAGE_PROTOCOL_NOT_SUPPORTED = "<page version=\"2.0\">Sorry, your messenger is not supported.</page>";
+  private final static String PAGE_PROTOCOL_NOT_SUPPORTED = "<page version=\"2.0\"><div>Sorry, your messenger is not supported.</div></page>";
 
 
   @Override
@@ -156,7 +156,7 @@ public class MsQnaBotServlet extends HttpServlet {
   }
 
   private static String createReplyPage(String text) {
-    return "<page version=\"2.0\" attributes=\"telegram.reply: true;\">" + text + "</page>";
+    return "<page version=\"2.0\" attributes=\"telegram.reply: true;\"><div>" + text + "</div></page>";
   }
 
   private static String getQuestion(HttpServletRequest request, String botAskCommandName, String userId) {
