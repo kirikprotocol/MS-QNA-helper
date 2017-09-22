@@ -3,7 +3,7 @@
 
   <section name="ms.qna.bot">
 
-    <param name="push.url" type="string">http://devel.globalussd.mobi/push?service=eyeline.demo</param>
+    <param name="push.url" type="string">https://api.miniapps.run/push</param>
     <param name="bot.ask.command.name" type="string">ask</param>
 
     <section name="ms.qna">

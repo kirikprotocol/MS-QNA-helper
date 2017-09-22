@@ -53,6 +53,7 @@ public class MsQnaBotServlet extends HttpServlet {
     String userId = getUserId(request);
     String protocol = request.getParameter("protocol");
     String eventId = request.getParameter("event.id");
+    String service = request.getParameter("service");
     Lang lang = null;
 
     if(log.isDebugEnabled())
@@ -96,7 +97,7 @@ public class MsQnaBotServlet extends HttpServlet {
       }
 
       lang = determineLanguage(question);
-      processAnswer(response, answer, lang, userId, eventId, protocol);
+      processAnswer(response, answer, lang, service, userId, eventId, protocol);
     }
     catch(Exception e) {
       log.error("Error [" + userId + "]: " + e.getMessage(), e);
@@ -120,14 +121,14 @@ public class MsQnaBotServlet extends HttpServlet {
     }
   }
 
-  private static void processAnswer(HttpServletResponse response, String answer, Lang lang, String userId, String eventId, String protocol) throws IOException {
+  private static void processAnswer(HttpServletResponse response, String answer, Lang lang, String service, String userId, String eventId, String protocol) throws IOException {
     if(log.isInfoEnabled())
       log.info("Answer [" + userId + "]: \"" + answer + "\"");
 
     if(answer == null) {
       String notFoundAnswerPage = createReplyPage(getNotFoundAnswerText(lang));
       sendResponse(response, notFoundAnswerPage, userId);
-      sendForward(userId, eventId, protocol);
+      sendForward(service, userId, eventId, protocol);
       return;
     }
 
@@ -214,11 +215,11 @@ public class MsQnaBotServlet extends HttpServlet {
     out.close();
   }
 
-  private static void sendForward(String userId, String eventId, String protocol) throws IOException {
+  private static void sendForward(String service, String userId, String eventId, String protocol) throws IOException {
     if(log.isDebugEnabled())
       log.debug("Send forward [" + userId + "]. Event ID: " + eventId);
 
-    String pushUrl = WebContext.getPushUrl() + "&user_id=" + userId + "&forward_event=" + eventId + "&protocol=" + protocol + "&message=test"; //message=test - костыль для SADS
+    String pushUrl = WebContext.getPushUrl() + "?service=" + service + "&user_id=" + userId + "&forward_event=" + eventId + "&protocol=" + protocol + "&message=test"; //message=test - костыль для SADS
 
     URL url = new URL(pushUrl);
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
