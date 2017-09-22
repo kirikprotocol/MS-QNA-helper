@@ -28,15 +28,16 @@ public class InitListener implements ServletContextListener {
     initLog4j(configDir);
 
     XmlConfig cfg = loadXmlConfig(configDir);
-    XmlConfigSection msQnaSection = getMsQnaSection(cfg);
-    XmlConfigSection chatSection = getChatSection(cfg);
+
+    XmlConfigSection botCfg = getBotConfig(cfg);
+    XmlConfigSection msQnaSection = getMsQnaSection(botCfg);
+
+    String pushUrl = getPushUrl(botCfg);
+    String botAskCommandName = getBotAskCommandName(botCfg);
 
     String msQnaKnowledgeBaseID = getMsQnaKnowledgeBaseID(msQnaSection);
     String msQnaSubscriptionKey = getMsQnaSubscriptionKey(msQnaSection);
     int minAcceptableScoreLevel = getMinAcceptableScoreLevel(msQnaSection);
-
-    String botAskCommandName = getBotAskCommandName(chatSection);
-    String pushUrl = getPushUrl(cfg);
 
     WebContext.init(msQnaKnowledgeBaseID, msQnaSubscriptionKey, minAcceptableScoreLevel, botAskCommandName, pushUrl);
   }
@@ -73,39 +74,21 @@ public class InitListener implements ServletContextListener {
     return cfg;
   }
 
-  private XmlConfigSection getMsQnaSection(XmlConfig config) {
-    XmlConfigSection botSection;
-
+  private XmlConfigSection getBotConfig(XmlConfig config) {
     try {
-      botSection = config.getSection("ms.qna.bot");
+      return config.getSection("ms.qna.bot");
     }
     catch(ConfigException e) {
       throw new RuntimeException("Section ms.qna.bot is not found in config.", e);
     }
+  }
 
+  private XmlConfigSection getMsQnaSection(XmlConfigSection botSection) {
     try {
       return botSection.getSection("ms.qna");
     }
     catch(ConfigException e) {
       throw new RuntimeException("Section ms.qna is not found in config.", e);
-    }
-  }
-
-  private XmlConfigSection getChatSection(XmlConfig config) {
-    XmlConfigSection botSection;
-
-    try {
-      botSection = config.getSection("ms.qna.bot");
-    }
-    catch(ConfigException e) {
-      throw new RuntimeException("Section ms.qna.bot is not found in config.", e);
-    }
-
-    try {
-      return botSection.getSection("chat");
-    }
-    catch(ConfigException e) {
-      throw new RuntimeException("Section chat is not found in config.", e);
     }
   }
 
@@ -136,21 +119,21 @@ public class InitListener implements ServletContextListener {
     }
   }
 
-  private String getBotAskCommandName(XmlConfigSection chatSection) {
+  private String getPushUrl(XmlConfigSection botCfg) {
     try {
-      return chatSection.getString("bot.ask.command.name");
+      return botCfg.getString("push.url");
     }
     catch(ConfigException e) {
-      throw new RuntimeException("Parameter bot.ask.command.name is not found in chat section.", e);
+      throw new RuntimeException("Parameter push.url is not found in ms.qna.bot section.", e);
     }
   }
 
-  private String getPushUrl(XmlConfig config) {
+  private String getBotAskCommandName(XmlConfigSection botCfg) {
     try {
-      return config.getString("push.url");
+      return botCfg.getString("bot.ask.command.name");
     }
     catch(ConfigException e) {
-      throw new RuntimeException("Parameter push.url is not found in config.", e);
+      throw new RuntimeException("Parameter bot.ask.command.name is not found in ms.qna.bot section.", e);
     }
   }
 
