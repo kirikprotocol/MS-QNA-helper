@@ -7,7 +7,7 @@
     <param name="bot.ask.command.name" type="string">ask</param>
 
     <section name="ms.qna">
-      <param name="knowledge.base.id" type="string">TOKEN</param>
+      <param name="knowledge.base.id" type="string">7db48466-5f28-4377-9e8f-2711604ff761</param>
       <param name="subscription.key" type="string">TOKEN</param>
       <param name="min.acceptable.score.level" type="int">0</param>
     </section>
